@@ -1,0 +1,34 @@
+---
+alwaysApply: true
+---
+# sandbox-image
+
+The container image that runs AI agents in isolated sandboxes. Same image
+runs in Docker (dev/Pi) and Unikraft (Mac/prod).
+
+## Conventions
+
+- **Language:** Go 1.25+
+- **Commits:** Conventional Commits (feat/fix/refactor/docs/test/ci/chore).
+  Prefix every commit message. Breaking changes go in the commit footer.
+- **Testing:** Standard Go testing with table-driven tests
+- **Build:** Use `make` for all operations. Run `make help` for targets.
+- **Formatting:** `make fmt` runs goimports + golangci-lint
+- **Errors:** Wrap with `fmt.Errorf("context: %w", err)`
+- **Constructors:** Use `func NewFoo() *Foo` pattern
+- **No manual versions:** semver is automated by semantic-release from commit history
+
+## Package Layout
+
+- `entrypoint/` - Go entrypoint binary (PID 1 in the container)
+- `Dockerfile` - Multi-arch container image definition
+
+## Key Design Decisions
+
+1. **Entrypoint binary.** A small Go binary that reads control plane env vars,
+   strips them from the environment, drops privileges, and execs the agent.
+2. **Env stripping.** SESSION_TOKEN, CONTROL_PLANE_URL, SESSION_ID are read
+   into variables then deleted from os.Environ before the agent starts.
+3. **Privilege drop.** Container starts as root (needed for setup), drops to
+   unprivileged `agent` user before exec-ing the agent command.
+4. **Multi-arch.** Dockerfile builds for linux/amd64 and linux/arm64 (Pi).

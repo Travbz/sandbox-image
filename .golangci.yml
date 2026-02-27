@@ -1,0 +1,11 @@
+# golangci-lint configuration
+# https://golangci-lint.run/usage/configuration/
+
+issues:
+  exclude-rules:
+    # defer Close() — error is unrecoverable at cleanup time.
+    - linters: [errcheck]
+      source: "defer .+\\.Close\\("
+    # os.Setenv/Unsetenv — never meaningfully fails on Linux.
+    - linters: [errcheck]
+      source: "os\\.(Setenv|Unsetenv)\\("

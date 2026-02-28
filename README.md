@@ -2,13 +2,16 @@
 
 The container image that runs AI agents in isolated sandboxes. Same image, two runtimes -- Docker for local dev and Raspberry Pi, Unikraft micro-VMs for macOS and cloud. This is the "Pattern 2" approach: isolate the entire agent, not just the tools.
 
-Part of a three-service system:
+Part of the agent sandbox system:
 
 | Repo | What it does |
 |---|---|
-| **[control-plane](https://github.com/Travbz/control-plane)** | Orchestrator -- config, secrets, provisioning, boot sequence |
-| **[llm-proxy](https://github.com/Travbz/llm-proxy)** | Credential-injecting LLM reverse proxy |
+| **[control-plane](https://github.com/Travbz/control-plane)** | Orchestrator -- config, secrets, provisioning, tools, memory |
+| **[llm-proxy](https://github.com/Travbz/llm-proxy)** | Credential-injecting LLM reverse proxy with token metering |
 | **[sandbox-image](https://github.com/Travbz/sandbox-image)** | This repo -- container image, entrypoint, env stripping, privilege drop |
+| **[api-gateway](https://github.com/Travbz/api-gateway)** | Customer-facing REST API -- job submission, SSE streaming, billing |
+| **[tools](https://github.com/Travbz/tools)** | MCP tool monorepo -- spec, reference tools |
+| **[agent](https://github.com/Travbz/agent)** | Reference agent implementation |
 
 ---
 
@@ -77,7 +80,7 @@ make build    # output: ./build/entrypoint
 make test     # run tests
 ```
 
-Requires Go 1.25+. Use `nix develop` if you have Nix.
+Requires Go 1.24+.
 
 ---
 

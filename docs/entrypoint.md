@@ -42,7 +42,7 @@ After reading, the following env vars are removed from the process environment:
 
 The agent command is determined in priority order:
 
-1. `AGENT_COMMAND` env var (set by control plane from `sandbox.toml`)
+1. `AGENT_COMMAND` env var (set by control plane from `sandbox.yaml`)
 2. CLI arguments passed to the entrypoint (`/usr/local/bin/entrypoint my-agent --flag`)
 
 Agent arguments follow the same pattern: `AGENT_ARGS` env var first, then positional CLI args.

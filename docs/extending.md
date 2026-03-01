@@ -25,11 +25,10 @@ Build it:
 docker build -t my-rootfs-image .
 ```
 
-Then reference it in your `sandbox.toml`:
+Then reference it in your `sandbox.yaml`:
 
-```toml
-[sandbox]
-image = "my-rootfs-image:latest"
+```yaml
+image: my-rootfs-image:latest
 ```
 
 ## Adding Python packages
@@ -67,13 +66,14 @@ COPY my-agent /usr/local/bin/my-agent
 RUN chmod +x /usr/local/bin/my-agent
 ```
 
-Then in `sandbox.toml`:
+Then in `sandbox.yaml`:
 
-```toml
-[sandbox]
-image   = "my-rootfs-image:latest"
-command = "my-agent"
-args    = ["--verbose"]
+```yaml
+image: my-rootfs-image:latest
+agent:
+  command: my-agent
+  args:
+    - --verbose
 ```
 
 ## Changing the base image
@@ -121,14 +121,18 @@ RUN mkdir -p /data /output /cache && \
     chown agent:agent /data /output /cache
 ```
 
-Then in `sandbox.toml`:
+Then in `sandbox.yaml`:
 
-```toml
-[shared_dirs]
-workspace = { host = "./workspace", guest = "/workspace" }
-data      = { host = "./data",      guest = "/data"      }
-output    = { host = "./output",    guest = "/output"    }
-cache     = { host = "./.cache",    guest = "/cache"     }
+```yaml
+shared_dirs:
+  - host_path: ./workspace
+    guest_path: /workspace
+  - host_path: ./data
+    guest_path: /data
+  - host_path: ./output
+    guest_path: /output
+  - host_path: ./.cache
+    guest_path: /cache
 ```
 
 ## Multi-arch builds
@@ -149,5 +153,5 @@ The base image is already multi-arch, so your extended image will be too as long
 
 - **Don't override ENTRYPOINT.** The entrypoint binary handles env stripping and privilege drop. If you need a setup step before the agent, use a wrapper script as the `AGENT_COMMAND` instead.
 - **Don't change the agent user's UID/GID** unless you also update your shared directory permissions. The default is 1000:1000.
-- **Don't install secrets into the image.** Use `sandbox.toml` to inject them at runtime. Baked-in secrets leak when the image is shared.
+- **Don't install secrets into the image.** Use `sandbox.yaml` to inject them at runtime. Baked-in secrets leak when the image is shared.
 - **Keep the image small.** Every MB matters when pulling on a Raspberry Pi over WiFi. Use `--no-cache` with apk and clean up temp files.

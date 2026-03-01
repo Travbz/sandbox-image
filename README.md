@@ -57,7 +57,7 @@ These are consumed by the entrypoint and **deleted** before the agent starts. Th
 
 ### Injected secrets (from CommandGrid)
 
-Any secrets configured with `mode = "inject"` in `sandbox.toml` are passed as regular env vars. These survive the stripping step -- only the control plane vars are removed.
+Any secrets configured with `mode = "inject"` in `sandbox.yaml` are passed as regular env vars. These survive the stripping step -- only the control plane vars are removed.
 
 ---
 

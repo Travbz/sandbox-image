@@ -54,7 +54,7 @@ These configure the entrypoint's behavior and are removed after being read. The 
 
 ## Injected secrets (kept)
 
-Secrets configured with `mode = "inject"` in `sandbox.toml` are set as plain environment variables. These survive the stripping phase because the entrypoint only removes specific known variable names.
+Secrets configured with `mode = "inject"` in `sandbox.yaml` are set as plain environment variables. These survive the stripping phase because the entrypoint only removes specific known variable names.
 
 | Variable | Example value | Source |
 |---|---|---|

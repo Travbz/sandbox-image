@@ -77,12 +77,14 @@ From the agent's perspective:
 
 ## File sync
 
-The control plane bind-mounts host directories into the sandbox at startup. These are configured in `sandbox.toml`:
+The control plane bind-mounts host directories into the sandbox at startup. These are configured in `sandbox.yaml`:
 
-```toml
-[shared_dirs]
-workspace = { host = "./workspace", guest = "/workspace" }
-output    = { host = "./output",    guest = "/output"    }
+```yaml
+shared_dirs:
+  - host_path: ./workspace
+    guest_path: /workspace
+  - host_path: ./output
+    guest_path: /output
 ```
 
 The bind mounts are read-write by default. The agent can read and write files in these directories, and changes are immediately visible on the host.

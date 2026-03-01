@@ -115,7 +115,7 @@ docker run --rm \
   -e AGENT_COMMAND=echo \
   -e AGENT_ARGS="hello from sandbox" \
   -e AGENT_USER=root \
-  RootFS:latest
+  rootfs:latest
 
 # run with an agent (assuming claude is installed in the image)
 docker run --rm \
@@ -125,7 +125,7 @@ docker run --rm \
   -e AGENT_COMMAND=claude \
   -e ANTHROPIC_API_KEY=session-my-token \
   -v "$(pwd)/workspace:/workspace" \
-  RootFS:latest
+  rootfs:latest
 ```
 
 ---

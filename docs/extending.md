@@ -7,7 +7,7 @@ The default image ships with a minimal set of tools (bash, curl, git, python3, n
 Create a Dockerfile that extends the base image:
 
 ```dockerfile
-FROM ghcr.io/travbz/RootFS:latest
+FROM ghcr.io/travbz/rootfs:latest
 
 # Install additional tools
 RUN apk add --no-cache \
@@ -36,7 +36,7 @@ image: my-rootfs-image:latest
 For Python-based agents:
 
 ```dockerfile
-FROM ghcr.io/travbz/RootFS:latest
+FROM ghcr.io/travbz/rootfs:latest
 
 RUN pip3 install --break-system-packages \
     anthropic \
@@ -48,7 +48,7 @@ RUN pip3 install --break-system-packages \
 Or use a requirements file:
 
 ```dockerfile
-FROM ghcr.io/travbz/RootFS:latest
+FROM ghcr.io/travbz/rootfs:latest
 
 COPY requirements.txt /tmp/requirements.txt
 RUN pip3 install --break-system-packages -r /tmp/requirements.txt && \
@@ -60,7 +60,7 @@ RUN pip3 install --break-system-packages -r /tmp/requirements.txt && \
 If your agent is a compiled binary:
 
 ```dockerfile
-FROM ghcr.io/travbz/RootFS:latest
+FROM ghcr.io/travbz/rootfs:latest
 
 COPY my-agent /usr/local/bin/my-agent
 RUN chmod +x /usr/local/bin/my-agent
@@ -115,7 +115,7 @@ The entrypoint binary is statically compiled, so it works on any Linux distro. J
 If your agent needs additional mount points beyond `/workspace`:
 
 ```dockerfile
-FROM ghcr.io/travbz/RootFS:latest
+FROM ghcr.io/travbz/rootfs:latest
 
 RUN mkdir -p /data /output /cache && \
     chown agent:agent /data /output /cache

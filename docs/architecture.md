@@ -40,7 +40,7 @@ flowchart TB
 The Dockerfile is architecture-agnostic. The CI pipeline builds for both `linux/amd64` and `linux/arm64` using `docker buildx`:
 
 ```bash
-docker buildx build --platform linux/amd64,linux/arm64 -t RootFS .
+docker buildx build --platform linux/amd64,linux/arm64 -t rootfs .
 ```
 
 This is critical for running on both x86 machines (cloud VMs, dev laptops) and ARM machines (Raspberry Pi, Apple Silicon via Docker Desktop).

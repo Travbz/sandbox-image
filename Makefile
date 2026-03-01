@@ -2,7 +2,7 @@
 
 BINARY := entrypoint
 BUILD_DIR := build
-IMAGE_NAME := sandbox-image
+IMAGE_NAME := rootfs
 IMAGE_TAG := latest
 
 ## help: Show this help message

@@ -1,4 +1,4 @@
-# sandbox-image
+# RootFS
 
 The container image that runs AI agents in isolated sandboxes. Same image, two runtimes -- Docker for local dev and Raspberry Pi, Unikraft micro-VMs for macOS and cloud. This is the "Pattern 2" approach: isolate the entire agent, not just the tools.
 
@@ -6,12 +6,12 @@ Part of the agent sandbox system:
 
 | Repo | What it does |
 |---|---|
-| **[control-plane](https://github.com/Travbz/control-plane)** | Orchestrator -- config, secrets, provisioning, tools, memory |
-| **[llm-proxy](https://github.com/Travbz/llm-proxy)** | Credential-injecting LLM reverse proxy with token metering |
-| **[sandbox-image](https://github.com/Travbz/sandbox-image)** | This repo -- container image, entrypoint, env stripping, privilege drop |
+| **[CommandGrid](https://github.com/Travbz/CommandGrid)** | Orchestrator -- config, secrets, provisioning, tools, memory |
+| **[GhostProxy](https://github.com/Travbz/GhostProxy)** | Credential-injecting LLM reverse proxy with token metering |
+| **[RootFS](https://github.com/Travbz/RootFS)** | This repo -- container image, entrypoint, env stripping, privilege drop |
 | **[api-gateway](https://github.com/Travbz/api-gateway)** | Customer-facing REST API -- job submission, SSE streaming, billing |
-| **[tools](https://github.com/Travbz/tools)** | MCP tool monorepo -- spec, reference tools |
-| **[agent](https://github.com/Travbz/agent)** | Reference agent implementation |
+| **[ToolCore](https://github.com/Travbz/ToolCore)** | MCP tool monorepo -- spec, reference tools |
+| **[JudgementD](https://github.com/Travbz/JudgementD)** | Reference agent implementation |
 
 ---
 
@@ -40,8 +40,8 @@ The entrypoint binary is a small Go program that acts as PID 1. It handles the s
 
 | Variable | Purpose |
 |---|---|
-| `SESSION_TOKEN` | Session token for authenticating with llm-proxy |
-| `CONTROL_PLANE_URL` | Base URL of the llm-proxy |
+| `SESSION_TOKEN` | Session token for authenticating with GhostProxy |
+| `CONTROL_PLANE_URL` | Base URL of GhostProxy |
 | `SESSION_ID` | Identifier for this sandbox session |
 
 These are consumed by the entrypoint and **deleted** before the agent starts. The agent never sees them.
@@ -55,7 +55,7 @@ These are consumed by the entrypoint and **deleted** before the agent starts. Th
 | `AGENT_USER` | `agent` | User to drop privileges to |
 | `AGENT_WORKDIR` | `/workspace` | Working directory for the agent |
 
-### Injected secrets (from control-plane)
+### Injected secrets (from CommandGrid)
 
 Any secrets configured with `mode = "inject"` in `sandbox.toml` are passed as regular env vars. These survive the stripping step -- only the control plane vars are removed.
 
@@ -104,7 +104,7 @@ The image builds for `linux/amd64` and `linux/arm64`. This means the same image 
 
 ## Running standalone
 
-You don't need the full control-plane to test the image:
+You don't need the full CommandGrid to test the image:
 
 ```bash
 # build it
@@ -115,7 +115,7 @@ docker run --rm \
   -e AGENT_COMMAND=echo \
   -e AGENT_ARGS="hello from sandbox" \
   -e AGENT_USER=root \
-  sandbox-image:latest
+  RootFS:latest
 
 # run with an agent (assuming claude is installed in the image)
 docker run --rm \
@@ -125,7 +125,7 @@ docker run --rm \
   -e AGENT_COMMAND=claude \
   -e ANTHROPIC_API_KEY=session-my-token \
   -v "$(pwd)/workspace:/workspace" \
-  sandbox-image:latest
+  RootFS:latest
 ```
 
 ---
@@ -133,7 +133,7 @@ docker run --rm \
 ## Project structure
 
 ```
-sandbox-image/
+RootFS/
 ├── entrypoint/
 │   ├── main.go              # entrypoint binary (PID 1)
 │   └── main_test.go

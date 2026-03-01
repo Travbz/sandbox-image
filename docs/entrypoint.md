@@ -12,8 +12,8 @@ The entrypoint reads three env vars set by the control plane during provisioning
 
 | Variable | Purpose |
 |---|---|
-| `SESSION_TOKEN` | The session token for the llm-proxy. The agent never needs this directly -- the SDK base URL is already pointed at the proxy. |
-| `CONTROL_PLANE_URL` | URL of the control plane API. Used if the sandbox needs to phone home (currently unused by agents). |
+| `SESSION_TOKEN` | The session token for GhostProxy. The agent never needs this directly -- the SDK base URL is already pointed at the proxy. |
+| `CONTROL_PLANE_URL` | URL of the CommandGrid API. Used if the sandbox needs to phone home (currently unused by agents). |
 | `SESSION_ID` | Identifier for this sandbox session. |
 
 These are read into local Go variables, then immediately unset from the process environment with `os.Unsetenv`.

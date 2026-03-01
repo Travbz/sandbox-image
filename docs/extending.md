@@ -1,4 +1,4 @@
-# Extending the Sandbox Image
+# Extending RootFS
 
 The default image ships with a minimal set of tools (bash, curl, git, python3, nodejs, npm). Most agents will need more. This document covers how to customize the image for your use case.
 
@@ -7,7 +7,7 @@ The default image ships with a minimal set of tools (bash, curl, git, python3, n
 Create a Dockerfile that extends the base image:
 
 ```dockerfile
-FROM ghcr.io/travbz/sandbox-image:latest
+FROM ghcr.io/travbz/RootFS:latest
 
 # Install additional tools
 RUN apk add --no-cache \
@@ -22,14 +22,14 @@ RUN apk add --no-cache \
 Build it:
 
 ```bash
-docker build -t my-sandbox-image .
+docker build -t my-rootfs-image .
 ```
 
 Then reference it in your `sandbox.toml`:
 
 ```toml
 [sandbox]
-image = "my-sandbox-image:latest"
+image = "my-rootfs-image:latest"
 ```
 
 ## Adding Python packages
@@ -37,7 +37,7 @@ image = "my-sandbox-image:latest"
 For Python-based agents:
 
 ```dockerfile
-FROM ghcr.io/travbz/sandbox-image:latest
+FROM ghcr.io/travbz/RootFS:latest
 
 RUN pip3 install --break-system-packages \
     anthropic \
@@ -49,7 +49,7 @@ RUN pip3 install --break-system-packages \
 Or use a requirements file:
 
 ```dockerfile
-FROM ghcr.io/travbz/sandbox-image:latest
+FROM ghcr.io/travbz/RootFS:latest
 
 COPY requirements.txt /tmp/requirements.txt
 RUN pip3 install --break-system-packages -r /tmp/requirements.txt && \
@@ -61,7 +61,7 @@ RUN pip3 install --break-system-packages -r /tmp/requirements.txt && \
 If your agent is a compiled binary:
 
 ```dockerfile
-FROM ghcr.io/travbz/sandbox-image:latest
+FROM ghcr.io/travbz/RootFS:latest
 
 COPY my-agent /usr/local/bin/my-agent
 RUN chmod +x /usr/local/bin/my-agent
@@ -71,7 +71,7 @@ Then in `sandbox.toml`:
 
 ```toml
 [sandbox]
-image   = "my-sandbox-image:latest"
+image   = "my-rootfs-image:latest"
 command = "my-agent"
 args    = ["--verbose"]
 ```
@@ -115,7 +115,7 @@ The entrypoint binary is statically compiled, so it works on any Linux distro. J
 If your agent needs additional mount points beyond `/workspace`:
 
 ```dockerfile
-FROM ghcr.io/travbz/sandbox-image:latest
+FROM ghcr.io/travbz/RootFS:latest
 
 RUN mkdir -p /data /output /cache && \
     chown agent:agent /data /output /cache
@@ -139,7 +139,7 @@ If you're extending the image and need it to run on both x86 and ARM (e.g., Rasp
 docker buildx create --name multiarch --use
 docker buildx build \
   --platform linux/amd64,linux/arm64 \
-  -t my-sandbox-image:latest \
+  -t my-rootfs-image:latest \
   --push .
 ```
 

@@ -37,7 +37,7 @@ These are set by the control plane during provisioning and removed by the entryp
 
 | Variable | Example value | Purpose |
 |---|---|---|
-| `SESSION_TOKEN` | `a1b2c3d4e5f6` | Session token for the llm-proxy. |
+| `SESSION_TOKEN` | `a1b2c3d4e5f6` | Session token for GhostProxy. |
 | `CONTROL_PLANE_URL` | `http://host.docker.internal:9000` | Control plane API address. |
 | `SESSION_ID` | `sandbox-dev-1` | Unique identifier for this sandbox run. |
 
